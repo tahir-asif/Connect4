@@ -28,3 +28,6 @@ vsCode_README.md
 
 # bin
 bin/
+
+# .DS_Store -- some macOS thing
+.DS_Store
