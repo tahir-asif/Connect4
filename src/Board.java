@@ -109,13 +109,13 @@ public class Board {
 	}
 
 
-	public int findWin(char symbol, boolean opposite) {
+	public int findWin(char symbol, boolean oppositeSymbol) {
 		int diagWin;
 		int horiWin;
 		int vertWin;
 		int negDiagWin;
 
-		if (opposite) {
+		if (oppositeSymbol) {
 			for (int row = 0; row < NUM_OF_ROWS; row++) {
 				for (int col = 0; col < NUM_OF_COLUMNS; col++) {
 					if (board[row][col] == NO_SYMBOL || board[row][col] == symbol) {
@@ -132,6 +132,7 @@ public class Board {
 			for (int col = 0; col < NUM_OF_COLUMNS; col++) {
 				if (board[row][col] != symbol) {continue;}
 
+				// counting how many symbols in a row appear
 				diagWin = 1;
 				horiWin = 1;
 				vertWin = 1;
