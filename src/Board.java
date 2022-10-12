@@ -114,6 +114,7 @@ public class Board {
 		int horiWin;
 		int vertWin;
 		int negDiagWin;
+		boolean doubleBreak = false;
 
 		if (oppositeSymbol) {
 			for (int row = 0; row < NUM_OF_ROWS; row++) {
@@ -121,10 +122,13 @@ public class Board {
 					if (board[row][col] == NO_SYMBOL || board[row][col] == symbol) {
 						continue;
 					} else {
+						// System.out.printf("opposite: %c\n", board[row][col]);
 						symbol = board[row][col];
+						doubleBreak = true;
 						break;
 					}
 				}
+				if (doubleBreak == true) {break;}
 			}
 		}
 
@@ -190,7 +194,7 @@ public class Board {
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
 					} finally {
-						if (row + 1 <= NUM_OF_ROWS && col - 1 >= 0) {
+						if (row + 1 < NUM_OF_ROWS && col - 1 >= 0) {
 							if (board[row + 1][col - 1] == NO_SYMBOL && board[row][col - 1] != NO_SYMBOL) {
 								return col;
 							}
@@ -235,9 +239,11 @@ public class Board {
 									return col;  // if on first row
 								}
 							}
-						} else if (board[row][col - 1] == NO_SYMBOL) {
-							// System.out.println("> 4");
-							return col;  // if on first row
+						} else if (col - 1 >= 0) {
+							if (board[row][col - 1] == NO_SYMBOL) {
+								// System.out.println("> 4");
+								return col;  // if on first row
+							}
 						}
 					}
 				}
@@ -275,5 +281,15 @@ public class Board {
 		for (int i = 0; i < NUM_OF_ROWS; i++)
 			for (int j = 0; j < NUM_OF_COLUMNS; j++)
 				board[i][j] = '.';
+	}
+	
+	public static void main(String[] args) {
+		Board b = new Board();
+		b.board[0][1] = 'X';
+		b.board[0][3] = 'O';
+		b.board[0][5] = 'O';
+		b.board[0][6] = 'X';
+		b.printBoard();
+		System.out.println(b.findWin('X', true));
 	}
 }

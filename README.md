@@ -20,4 +20,4 @@
 - input safety (probably using custom exceptions and handling)
 - improve AI
     - possibly modify board.findWin() to check for 2 long straights and focus those
-- have drop piece take a paremeter called last move which is then stored in a global variable in board which is then used to check for wins only on new piece
+- have drop piece take a parameter called last move which is then stored in a global variable in board which is then used to check for wins only on new piece
