@@ -210,20 +210,35 @@ public class Board {
 						// go over the 4 spaces, find empty spot, check if valid
 						for (int i = 0; i < WIN_LENGTH; i++) {
 							// only continue if open space
+							// System.out.printf("r: %d, c: %d, i: %d, p: %c, %b\n", row, col, i, board[row][col + i], board[row][col + i] != NO_SYMBOL);
 							if (board[row][col + i] != NO_SYMBOL) {continue;}
 							// if open space is not on first row
 							if (row - 1 >= 0) {
 								// only return if there is a piece under winning spot
-								if (board[row - 1][col + i] != NO_SYMBOL) {return col + i + 1;}
-							} else {return col + i + 1;}  // if on first row
+								if (board[row - 1][col + i] != NO_SYMBOL) {
+									// System.out.println("> 1");
+									return col + i + 1;
+								}
+							} else {
+								// System.out.println("> 2");
+								return col + i + 1;  // if on first row
+							}
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
 					} finally {
 						// if open space is not on first row
 						if (row - 1 >= 0 && col - 1 >= 0) {
 							// only return if there is a piece under winning spot
-							if (board[row][col - 1] == NO_SYMBOL) {return col;}
-						} else if (board[row][col - 1] == NO_SYMBOL) {return col;}  // if on first row
+							if (board[row - 1][col - 1] != NO_SYMBOL) {
+								if (board[row][col - 1] == NO_SYMBOL) {
+									// System.out.println("> 3");
+									return col;  // if on first row
+								}
+							}
+						} else if (board[row][col - 1] == NO_SYMBOL) {
+							// System.out.println("> 4");
+							return col;  // if on first row
+						}
 					}
 				}
 
@@ -260,15 +275,5 @@ public class Board {
 		for (int i = 0; i < NUM_OF_ROWS; i++)
 			for (int j = 0; j < NUM_OF_COLUMNS; j++)
 				board[i][j] = '.';
-	}
-	
-
-	public static void main(String[] args) {
-		Board b = new Board();
-		b.board[0][2] = 'B';
-		b.board[0][3] = 'B';
-		b.board[0][4] = 'B';
-		b.board[0][5] = 'A';
-		b.printBoard();
 	}
 }

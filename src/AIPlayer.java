@@ -13,7 +13,7 @@ public class AIPlayer extends Player{
         Random r = new Random();
 
         int AIWin = board.findWin(symbol, false);
-        int otherWin = board.findWin(symbol, true);
+        int otherWin = board.findWin('O', false);
         boolean validMove;
         int randMove;
 
