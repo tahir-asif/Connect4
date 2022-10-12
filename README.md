@@ -1,6 +1,6 @@
 # Connect4
 
-### TODO:
+### To Do List:
 
 Important (DO before submitting):
 - check if I need to do anything with human and AI constructors
