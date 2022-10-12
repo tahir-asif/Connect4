@@ -132,8 +132,6 @@ public class Board {
 			for (int col = 0; col < NUM_OF_COLUMNS; col++) {
 				if (board[row][col] != symbol) {continue;}
 
-				// fuckkckck ki love trainsssss!!!!!!!!!!
-
 				// counting how many symbols in a row appear
 				diagWin = 1;
 				horiWin = 1;
@@ -141,117 +139,107 @@ public class Board {
 				negDiagWin = 1;
 
 				// find diagonal win conditions
-				for (int i = 1; i < WIN_LENGTH - 1; i++) {
+				for (int i = 1; i < WIN_LENGTH; i++) {
 					try {
-						if (board[row + i][col + i] == symbol) {
-							diagWin++;
+						if (board[row + i][col + i] == symbol) {diagWin++;}
+					} catch (ArrayIndexOutOfBoundsException e) {break;}
+				} 
+
+				if (diagWin == WIN_LENGTH - 1) {  // if 3 symbols in a 4 long line
+					try {
+						// go over the 4 spaces, find empty spot, check if valid
+						for (int i = 0; i < WIN_LENGTH; i++) {
+							// only continue if open space
+							if (board[row + i][col + i] != NO_SYMBOL) {continue;}
+							// if open space is not on first row
+							if (row + i - 1 >= 0) {
+								// only return if there is a piece under winning spot
+								if (board[row + i - 1][col + i] != NO_SYMBOL) {return col + i + 1;}
+							} else {return col + i + 1;}  // if on first row
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
-						break;
+					} finally {
+						if (row - 2 >= 0 && col - 1 >= 0) {  // if on the 3rd row or higher
+							if (board[row - 1][col - 1] == NO_SYMBOL && board[row - 2][col - 1] != NO_SYMBOL) {
+								return col;
+							}
+						} else if (row - 1 >= 0 && col - 1 >= 0) {  // if on 2nd row
+							if (board[row - 1][col - 1] == NO_SYMBOL) {return col;}
+						}
 					}
-				} 
-				if (diagWin == WIN_LENGTH - 1) {
-					try {
-						// checks if next diagonal space is open to the right && there is a piece below it
-						if (board[row + WIN_LENGTH - 1][col + WIN_LENGTH - 1] == NO_SYMBOL
-							&& board[row + WIN_LENGTH - 2][col + WIN_LENGTH - 1] != NO_SYMBOL) {
-							return col + WIN_LENGTH;
-						}
-						// checks if next diagonal space is open to the left && there is a piece below it
-						if (row - 2 >= 0) {  // if on the 3rd row or higher
-							if (board[row - 1][col - 1] == NO_SYMBOL
-								&& board[row - 2][col - 1] != NO_SYMBOL) {
-								return col;
-							}
-						} else if (row - 1 >= 0) {  // ~if on 2nd row
-							if (board[row - 1][col - 1] == NO_SYMBOL) {
-								return col;
-							}
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {}
 				}
 
 				// find inverse diagonal win conditions
-				for (int i = 1; i < WIN_LENGTH - 1; i++) {
+				for (int i = 1; i < WIN_LENGTH; i++) {
 					try {
-						if (board[row - i][col + i] == symbol) {
-							negDiagWin++;
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {
-						break;
-					}
-				} 
-				if (negDiagWin == WIN_LENGTH - 1) {
-					try {
-						// checks if next diagonal space is open to the right && there is a piece below it
-						if (board[row - WIN_LENGTH + 1][col + WIN_LENGTH - 1] == NO_SYMBOL
-							&& board[row - WIN_LENGTH][col + WIN_LENGTH - 1] != NO_SYMBOL) {
-							return col + WIN_LENGTH;
-						}
-						// checks if next diagonal space is open to the left && there is a piece below it
-						if (board[row + 1][col - 1] == NO_SYMBOL
-							&& board[row][col - 1] != NO_SYMBOL) {
-							return col;
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {}
+						if (board[row - i][col + i] == symbol) {negDiagWin++;}
+					} catch (ArrayIndexOutOfBoundsException e) {break;}
 				}
 
-				// find horizontal win conditions
-				for (int i = 1; i < WIN_LENGTH - 1; i++) {
+				if (negDiagWin == WIN_LENGTH - 1) {  // if 3 symbols in a 4 long line
 					try {
-						if (board[row][col + i] == symbol) {
-							horiWin++;
+						// go over the 4 spaces, find empty spot, check if valid
+						for (int i = 0; i < WIN_LENGTH; i++) {
+							// only continue if open space
+							if (board[row - i][col + i] != NO_SYMBOL) {continue;}
+							// if open space is not on first row
+							if (row - i - 1 >= 0) {
+								// only return if there is a piece under winning spot
+								if (board[row - i - 1][col + i] != NO_SYMBOL) {return col + i + 1;}
+							} else {return col + i + 1;}  // if on first row
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
-						break;
-					}
-				}
-				if (horiWin == WIN_LENGTH - 1) {
-					try {
-						// checks if horizontal space to the right is available
-						if (board[row][col + WIN_LENGTH - 1] == NO_SYMBOL) {
-							// if the pattern is not on the first row
-							if (row - 1 >= 0) {
-								// then check if their is space underneath the winning spot
-								if (board[row - 1][col + WIN_LENGTH - 1] != NO_SYMBOL) {
-									return col + WIN_LENGTH;
-								}
-							} else {  // if it is on first row, then no need to check underneath
-								return col + WIN_LENGTH;
-							}
-						}
-						// checks if horizontal space to the left is available
-						if (board[row][col - 1] == NO_SYMBOL) {
-							// if the pattern is not on the first row
-							if (row - 1 >= 0) {
-								// then check if their is space underneath the winning spot
-								if (board[row - 1][col - 1] != NO_SYMBOL) {
-									return col;
-								}
-							} else {  // if it is on first row, then no need to check underneath
+					} finally {
+						if (row + 1 <= NUM_OF_ROWS && col - 1 >= 0) {
+							if (board[row + 1][col - 1] == NO_SYMBOL && board[row][col - 1] != NO_SYMBOL) {
 								return col;
 							}
 						}
-					} catch (ArrayIndexOutOfBoundsException e) {}
+					}
+				}
+
+				// find horizontal win conditions
+				for (int i = 1; i < WIN_LENGTH; i++) {
+					try {
+						if (board[row][col + i] == symbol) {horiWin++;}
+					} catch (ArrayIndexOutOfBoundsException e) {break;}
+				}
+
+				if (horiWin == WIN_LENGTH - 1) {  // if 3 symbols in a 4 long line
+					try {
+						// go over the 4 spaces, find empty spot, check if valid
+						for (int i = 0; i < WIN_LENGTH; i++) {
+							// only continue if open space
+							if (board[row][col + i] != NO_SYMBOL) {continue;}
+							// if open space is not on first row
+							if (row - 1 >= 0) {
+								// only return if there is a piece under winning spot
+								if (board[row - 1][col + i] != NO_SYMBOL) {return col + i + 1;}
+							} else {return col + i + 1;}  // if on first row
+						}
+					} catch (ArrayIndexOutOfBoundsException e) {
+					} finally {
+						// if open space is not on first row
+						if (row - 1 >= 0 && col - 1 >= 0) {
+							// only return if there is a piece under winning spot
+							if (board[row][col - 1] == NO_SYMBOL) {return col;}
+						} else if (board[row][col - 1] == NO_SYMBOL) {return col;}  // if on first row
+					}
 				}
 
 				// find vertical win conditions
 				for (int i = 1; i < WIN_LENGTH - 1; i++) {
 					try {
-						if (board[row + i][col] == symbol) {
-							vertWin++;
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {
-						break;
-					}
+						if (board[row + i][col] == symbol) {vertWin++;}
+					} catch (ArrayIndexOutOfBoundsException e) {break;}
 				}
+				
 				if (vertWin == WIN_LENGTH - 1) {
 					try {
-						if (board[row + WIN_LENGTH - 1][col] == NO_SYMBOL) {
-							return col + 1;  // maybe no +1
-						}
+						if (board[row + WIN_LENGTH - 1][col] == NO_SYMBOL) {return col + 1;}
 					} catch (ArrayIndexOutOfBoundsException e) {}
 				}
+			
 			}
 		}
 		return -1;  // if no win was found on the board
