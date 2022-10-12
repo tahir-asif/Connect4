@@ -132,6 +132,8 @@ public class Board {
 			for (int col = 0; col < NUM_OF_COLUMNS; col++) {
 				if (board[row][col] != symbol) {continue;}
 
+				// fuckkckck ki love trainsssss!!!!!!!!!!
+
 				// counting how many symbols in a row appear
 				diagWin = 1;
 				horiWin = 1;
