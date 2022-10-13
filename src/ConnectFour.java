@@ -35,9 +35,6 @@ public class ConnectFour {
 
 			board.printBoard();
 			changeTurns();
-			
-			System.out.printf("found win X: %d | found win O: %d ! opposite\n", board.findWin('X', false), board.findWin('X', true));
-			System.out.printf("found win X: %d | found win O: %d // ", board.findWin('X', false), board.findWin('O', false));
 		}
 
 		if(board.containsWin()) {

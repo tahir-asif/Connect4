@@ -276,14 +276,4 @@ public class Board {
 			for (int j = 0; j < NUM_OF_COLUMNS; j++)
 				board[i][j] = '.';
 	}
-	
-	public static void main(String[] args) {
-		Board b = new Board();
-		b.board[0][1] = 'X';
-		b.board[0][3] = 'O';
-		b.board[0][5] = 'O';
-		b.board[0][6] = 'X';
-		b.printBoard();
-		System.out.println(b.findWin('X', true));
-	}
 }
