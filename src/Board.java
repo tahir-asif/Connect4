@@ -110,10 +110,7 @@ public class Board {
 
 
 	public int findWin(char symbol, boolean oppositeSymbol) {
-		int diagWin;
-		int horiWin;
 		int vertWin;
-		int negDiagWin;
 		boolean doubleBreak = false;
 
 		if (oppositeSymbol) {
@@ -122,7 +119,6 @@ public class Board {
 					if (board[row][col] == NO_SYMBOL || board[row][col] == symbol) {
 						continue;
 					} else {
-						// System.out.printf("opposite: %c\n", board[row][col]);
 						symbol = board[row][col];
 						doubleBreak = true;
 						break;
@@ -136,109 +132,117 @@ public class Board {
 			for (int col = 0; col < NUM_OF_COLUMNS; col++) {
 				if (board[row][col] != symbol) {continue;}
 
-				// counting how many symbols in a row appear
-				diagWin = 1;
-				horiWin = 1;
-				vertWin = 1;
-				negDiagWin = 1;
-
-				// find diagonal win conditions
-				for (int i = 1; i < WIN_LENGTH; i++) {
-					try {
-						if (board[row + i][col + i] == symbol) {diagWin++;}
-					} catch (ArrayIndexOutOfBoundsException e) {break;}
-				} 
-
-				if (diagWin == WIN_LENGTH - 1) {  // if 3 symbols in a 4 long line
-					try {
-						// go over the 4 spaces, find empty spot, check if valid
-						for (int i = 0; i < WIN_LENGTH; i++) {
-							// only continue if open space
-							if (board[row + i][col + i] != NO_SYMBOL) {continue;}
-							// if open space is not on first row
-							if (row + i - 1 >= 0) {
-								// only return if there is a piece under winning spot
-								if (board[row + i - 1][col + i] != NO_SYMBOL) {return col + i + 1;}
-							} else {return col + i + 1;}  // if on first row
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {}
-					if (row - 2 >= 0 && col - 1 >= 0) {  // if on the 3rd row or higher
-						if (board[row - 1][col - 1] == NO_SYMBOL && board[row - 2][col - 1] != NO_SYMBOL) {
-							return col;
-						}
-					} else if (row - 1 >= 0 && col - 1 >= 0) {  // if on 2nd row
-						if (board[row - 1][col - 1] == NO_SYMBOL) {return col;}
-					}
-				}
-
-				// find inverse diagonal win conditions
-				for (int i = 1; i < WIN_LENGTH; i++) {
-					try {
-						if (board[row - i][col + i] == symbol) {negDiagWin++;}
-					} catch (ArrayIndexOutOfBoundsException e) {break;}
-				}
-
-				if (negDiagWin == WIN_LENGTH - 1) {  // if 3 symbols in a 4 long line
-					try {
-						// go over the 4 spaces, find empty spot, check if valid
-						for (int i = 0; i < WIN_LENGTH; i++) {
-							// only continue if open space
-							if (board[row - i][col + i] != NO_SYMBOL) {continue;}
-							// if open space is not on first row
-							if (row - i - 1 >= 0) {
-								// only return if there is a piece under winning spot
-								if (board[row - i - 1][col + i] != NO_SYMBOL) {return col + i + 1;}
-							} else {return col + i + 1;}  // if on first row
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {}
-					if (row + 1 < NUM_OF_ROWS && col - 1 >= 0) {
-						if (board[row + 1][col - 1] == NO_SYMBOL && board[row][col - 1] != NO_SYMBOL) {
-							return col;
-						}
-					}
-				}
-
-				// find horizontal win conditions
-				for (int i = 1; i < WIN_LENGTH; i++) {
-					try {
-						if (board[row][col + i] == symbol) {horiWin++;}
-					} catch (ArrayIndexOutOfBoundsException e) {break;}
-				}
-
-				if (horiWin == WIN_LENGTH - 1) {  // if 3 symbols in a 4 long line
-					try {
-						// go over the 4 spaces, find empty spot, check if valid
-						for (int i = 0; i < WIN_LENGTH; i++) {
-							// only continue if open space
-							if (board[row][col + i] != NO_SYMBOL) {continue;}
-							// if open space is not on first row
-							if (row - 1 >= 0) {
-								// only return if there is a piece under winning spot
-								if (board[row - 1][col + i] != NO_SYMBOL) {
-									// System.out.println("> 1");
-									return col + i + 1;
+				// finding horizontal win condition
+				if (col + 2 < NUM_OF_COLUMNS) {  // prevents out of bounds errors
+					if (board[row][col + 1] == symbol && board[row][col + 2] == symbol) {
+						if (col + 3 < NUM_OF_COLUMNS) {  // prevent out of bounds errors
+							if (row - 1 >= 0) {  // prevents out of bounds errors
+								if (board[row][col + 3] == NO_SYMBOL && board[row - 1][col + 3] != NO_SYMBOL) {
+									return col + 3 + 1;  // +1 is to 1 index instead of 0 index
 								}
-							} else {
-								return col + i + 1;  // if on first row
+							} else if (board[row][col + 3] == NO_SYMBOL) {
+								return col + 3 + 1;
 							}
 						}
-					} catch (ArrayIndexOutOfBoundsException e) {}
-					// if open space is not on first row
-					if (row - 1 >= 0 && col - 1 >= 0) {
-						// only return if there is a piece under winning spot
-						if (board[row - 1][col - 1] != NO_SYMBOL) {
-							if (board[row][col - 1] == NO_SYMBOL) {
-								return col;  // if on first row
+						if (col - 1 >= 0) {  // prevents out of bounds errors
+							if (row - 1 >= 0) {  // prevents out of bounds errors
+								if (board[row][col - 1] == NO_SYMBOL && board[row - 1][col - 1] != NO_SYMBOL) {
+									return col - 1 + 1;  // +1 is to 1 index instead of 0 index
+								}
+							} else if (board[row][col - 1] == NO_SYMBOL) {
+								return col - 1 + 1;
 							}
 						}
-					} else if (col - 1 >= 0) {
-						if (board[row][col - 1] == NO_SYMBOL) {
-							return col;  // if on first row
+					} else if ((board[row][col + 1] == symbol && board[row][col + 2] == NO_SYMBOL)) {
+						if (col + 3 < NUM_OF_COLUMNS) {  // prevent out of bounds errors
+							if (row - 1 >= 0) {  // prevents out of bounds errors
+								if (board[row][col + 3] == symbol && board[row - 1][col + 2] != NO_SYMBOL) {
+									return col + 2 + 1;  // +1 is to 1 index instead of 0 index
+								}
+							} else if (board[row][col + 3] == symbol) {
+								return col + 2 + 1;
+							}
+						}
+					} else if (board[row][col + 1] == NO_SYMBOL && board[row][col + 2] == symbol) {
+						if (col + 3 < NUM_OF_COLUMNS) {  // prevent out of bounds errors
+							if (row - 1 >= 0) {  // prevents out of bounds errors
+								if (board[row][col + 3] == symbol && board[row - 1][col + 1] != NO_SYMBOL) {
+									return col + 1 + 1;  // +1 is to 1 index instead of 0 index
+								}
+							} else if (board[row][col + 3] == symbol) {
+								return col + 1 + 1;
+							}
+						}
+					}
+				}
+
+				// finding diagonal win condition
+				if (col + 2 < NUM_OF_COLUMNS && row + 2 < NUM_OF_ROWS) {  // prevents out of bounds errors
+					if (board[row + 1][col + 1] == symbol && board[row + 2][col + 2] == symbol) {
+						if (col + 3 < NUM_OF_COLUMNS && row + 3 < NUM_OF_ROWS) {  // prevent out of bounds errors
+							if (board[row + 3][col + 3] == NO_SYMBOL && board[row + 2][col + 3] != NO_SYMBOL) {
+								return col + 3 + 1;  // +1 is to 1 index instead of 0 index
+							}
+						}
+						if (col - 1 >= 0 && row - 1 >= 0) {  // prevents out of bounds errors
+							if (row - 2 >= 0) {  // prevents out of bounds errors
+								if (board[row - 1][col - 1] == NO_SYMBOL && board[row - 2][col - 1] != NO_SYMBOL) {
+									return col - 1 + 1;  // +1 is to 1 index instead of 0 index
+								}
+							} else if (board[row - 1][col - 1] == NO_SYMBOL) {
+								return col - 1 + 1; 
+							}
+						}
+					} else if ((board[row + 1][col + 1] == symbol && board[row + 2][col + 2] == NO_SYMBOL)) {
+						if (col + 3 < NUM_OF_COLUMNS && row + 3 < NUM_OF_ROWS) {  // prevent out of bounds errors
+							if (board[row + 3][col + 3] == symbol && board[row + 1][col + 2] != NO_SYMBOL) {
+								return col + 2 + 1;  // +1 is to 1 index instead of 0 index
+							}
+						}
+					} else if (board[row + 1][col + 1] == NO_SYMBOL && board[row + 2][col + 2] == symbol) {
+						if (col + 3 < NUM_OF_COLUMNS && row + 3 < NUM_OF_ROWS) {  // prevent out of bounds errors
+							if (board[row + 3][col + 3] == symbol && board[row][col + 1] != NO_SYMBOL) {
+								return col + 1 + 1;  // +1 is to 1 index instead of 0 index
+							}
+						}
+					}
+				}
+
+				// finding inverse diagonal win condition
+				if (col + 2 < NUM_OF_COLUMNS && row - 2 >= 0) {  // prevents out of bounds errors
+					if (board[row - 1][col + 1] == symbol && board[row - 2][col + 2] == symbol) {
+						if (col + 3 < NUM_OF_COLUMNS && row - 3 >= 0) {  // prevent out of bounds errors
+							if (row - 4 >= 0) {
+								if (board[row - 3][col + 3] == NO_SYMBOL && board[row - 4][col + 3] != NO_SYMBOL) {
+									return col + 3 + 1;  // +1 is to 1 index instead of 0 index
+								}
+							} else if (board[row - 3][col + 3] == NO_SYMBOL) {
+								return col + 3 + 1;
+							}
+						}
+						if (col - 1 >= 0 && row + 1 < NUM_OF_ROWS) {  // prevents out of bounds errors
+							if (board[row + 1][col - 1] == NO_SYMBOL && board[row][col - 1] != NO_SYMBOL) {
+								return col - 1 + 1;  // +1 is to 1 index instead of 0 index
+							}
+						}
+					} else if ((board[row - 1][col + 1] == symbol && board[row - 2][col + 2] == NO_SYMBOL)) {
+						if (col + 3 < NUM_OF_COLUMNS && row - 3 >= 0) {  // prevent out of bounds errors
+							if (board[row - 3][col + 3] == symbol && board[row - 3][col + 2] != NO_SYMBOL) {
+								return col + 2 + 1;  // +1 is to 1 index instead of 0 index
+							}
+						}
+					} else if (board[row - 1][col + 1] == NO_SYMBOL && board[row - 2][col + 2] == symbol) {
+						if (col + 3 < NUM_OF_COLUMNS && row - 3 >= 0) {  // prevent out of bounds errors
+							if (board[row - 3][col + 3] == symbol && board[row - 2][col + 1] != NO_SYMBOL) {
+								return col + 1 + 1;  // +1 is to 1 index instead of 0 index
+							}
 						}
 					}
 				}
 
 				// find vertical win conditions
+				vertWin = 1;
+
 				for (int i = 1; i < WIN_LENGTH - 1; i++) {
 					try {
 						if (board[row + i][col] == symbol) {vertWin++;}
