@@ -3,8 +3,6 @@
 ### To Do List:
 
 ##### Important (DO before submitting):
-- check if I need to do anything with human and AI constructors
-- remove ArrayList from AIPlayer.java
 
 
 ##### Less Important (Maybe do before submitting):
