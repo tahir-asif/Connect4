@@ -42,7 +42,7 @@ public class AIPlayer extends Player{
     public void printMoves() {
         System.out.printf("%s ", name);
         for (int m : movesMade) { 		      
-	        System.out.printf("%d ", m);
+	        System.out.printf("%d   ", m);
 	    }
     }
 }

@@ -161,15 +161,13 @@ public class Board {
 								if (board[row + i - 1][col + i] != NO_SYMBOL) {return col + i + 1;}
 							} else {return col + i + 1;}  // if on first row
 						}
-					} catch (ArrayIndexOutOfBoundsException e) {
-					} finally {
-						if (row - 2 >= 0 && col - 1 >= 0) {  // if on the 3rd row or higher
-							if (board[row - 1][col - 1] == NO_SYMBOL && board[row - 2][col - 1] != NO_SYMBOL) {
-								return col;
-							}
-						} else if (row - 1 >= 0 && col - 1 >= 0) {  // if on 2nd row
-							if (board[row - 1][col - 1] == NO_SYMBOL) {return col;}
+					} catch (ArrayIndexOutOfBoundsException e) {}
+					if (row - 2 >= 0 && col - 1 >= 0) {  // if on the 3rd row or higher
+						if (board[row - 1][col - 1] == NO_SYMBOL && board[row - 2][col - 1] != NO_SYMBOL) {
+							return col;
 						}
+					} else if (row - 1 >= 0 && col - 1 >= 0) {  // if on 2nd row
+						if (board[row - 1][col - 1] == NO_SYMBOL) {return col;}
 					}
 				}
 
@@ -192,12 +190,10 @@ public class Board {
 								if (board[row - i - 1][col + i] != NO_SYMBOL) {return col + i + 1;}
 							} else {return col + i + 1;}  // if on first row
 						}
-					} catch (ArrayIndexOutOfBoundsException e) {
-					} finally {
-						if (row + 1 < NUM_OF_ROWS && col - 1 >= 0) {
-							if (board[row + 1][col - 1] == NO_SYMBOL && board[row][col - 1] != NO_SYMBOL) {
-								return col;
-							}
+					} catch (ArrayIndexOutOfBoundsException e) {}
+					if (row + 1 < NUM_OF_ROWS && col - 1 >= 0) {
+						if (board[row + 1][col - 1] == NO_SYMBOL && board[row][col - 1] != NO_SYMBOL) {
+							return col;
 						}
 					}
 				}
@@ -214,7 +210,6 @@ public class Board {
 						// go over the 4 spaces, find empty spot, check if valid
 						for (int i = 0; i < WIN_LENGTH; i++) {
 							// only continue if open space
-							// System.out.printf("r: %d, c: %d, i: %d, p: %c, %b\n", row, col, i, board[row][col + i], board[row][col + i] != NO_SYMBOL);
 							if (board[row][col + i] != NO_SYMBOL) {continue;}
 							// if open space is not on first row
 							if (row - 1 >= 0) {
@@ -224,26 +219,21 @@ public class Board {
 									return col + i + 1;
 								}
 							} else {
-								// System.out.println("> 2");
 								return col + i + 1;  // if on first row
 							}
 						}
-					} catch (ArrayIndexOutOfBoundsException e) {
-					} finally {
-						// if open space is not on first row
-						if (row - 1 >= 0 && col - 1 >= 0) {
-							// only return if there is a piece under winning spot
-							if (board[row - 1][col - 1] != NO_SYMBOL) {
-								if (board[row][col - 1] == NO_SYMBOL) {
-									// System.out.println("> 3");
-									return col;  // if on first row
-								}
-							}
-						} else if (col - 1 >= 0) {
+					} catch (ArrayIndexOutOfBoundsException e) {}
+					// if open space is not on first row
+					if (row - 1 >= 0 && col - 1 >= 0) {
+						// only return if there is a piece under winning spot
+						if (board[row - 1][col - 1] != NO_SYMBOL) {
 							if (board[row][col - 1] == NO_SYMBOL) {
-								// System.out.println("> 4");
 								return col;  // if on first row
 							}
+						}
+					} else if (col - 1 >= 0) {
+						if (board[row][col - 1] == NO_SYMBOL) {
+							return col;  // if on first row
 						}
 					}
 				}
